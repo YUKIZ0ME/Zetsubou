@@ -1,4 +1,4 @@
-//单链表的建立，插入，删除和反转
+//单链表的建立，插入，遍历，删除和反转
 #include<iostream>
 using std::cout;
 using std::endl;
