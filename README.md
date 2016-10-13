@@ -1,0 +1,2 @@
+# Zetsubou
+start studying
