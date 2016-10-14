@@ -93,7 +93,7 @@ int main(){
         }
         profit = income - payment;
         total_income+=income;
-        total_payment-=payment;
+        total_payment+=payment;
         cout<<year<<"-";
         if(month < 10)
             cout<<"0"<<month<<"-";
@@ -116,16 +116,14 @@ int main(){
             cout<<"0 ";
         else
             cout<<"-"<<payment<<" ";
-        if(profit == 0)
-            cout<<"0"<<endl;
-        else if(profit < 0)
+        if(profit <= 0)
             cout<<profit<<endl;
         else
             cout<<"+"<<profit<<endl;
     }
     cout<<endl;
     cout<<"Total Income: "<<total_income<<endl;
-    cout<<"Total Payment "<<0 - total_payment<<endl;
-    cout<<"Profit "<<total_income + total_payment<<endl;
+    cout<<"Total Payment "<<total_payment<<endl;
+    cout<<"Profit "<<total_income - total_payment<<endl;
     return 0;
 }
