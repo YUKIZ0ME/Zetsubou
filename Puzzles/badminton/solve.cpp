@@ -1,8 +1,8 @@
 #include <iostream>
 using namespace std;
 int Week(int year, int month, int date){
-    int week = (date + 1 + 2*month + 3*(month + 1)/5 + year + year/4 - year/100 + year/400) % 7;
-    return week;
+    int week = (date + 1 + 2*month + 3*(month + 1)/5 + year + year/4 - year/100 + year/400) % 7;  //基姆拉尔森星期公式
+    return week; 
 }
 
 int Field(int M){
@@ -27,42 +27,45 @@ int Field(int M){
 
 int Payment(int week, int starttime, int endtime){
     int payment;
-    if(1 <= week <= 5){
+    if(1 <= week <= 5){                                                                    //星期1-5的情况
         if(starttime >= 9 && endtime <= 12){
-            payment = 30 * (endtime - starttime);
+            payment = 30 * (endtime - starttime);                                          //上午9-12点时段
         }
         else if(starttime < 12 && endtime >12){
-            payment = 30 * (12 - starttime) + 50 * (endtime - 12);
+            payment = 30 * (12 - starttime) + 50 * (endtime - 12);                         //12点前开打，最多三小时，因此不会超过18点
         }
-        else if(starttime >=12 && endtime <= 18){
+        else if(starttime >=12 && endtime <= 18){                                          //下午12-18点时段
             payment = 50 * (endtime - starttime);
         }
         else if(starttime <18 && endtime >18){
-            payment = 50 * (18 - starttime) + 80 * (endtime - 18);
+            payment = 50 * (18 - starttime) + 80 * (endtime - 18);                         //18点前开打，最多3小时，因此不会超过20点
         }
         else if(starttime >= 18 && endtime <= 20){
-            payment = 80 * (endtime - starttime);
+            payment = 80 * (endtime - starttime);                                          //晚间18-20点时段
         }
         else if(starttime < 20 && endtime > 20){
-            payment = 80 * (20 - starttime) + 60 * (endtime - 20);
+            payment = 80 * (20 - starttime) + 60 * (endtime - 20);                         //晚间从20点前打到20点以后
         }
         else if(starttime >= 20){
-            payment = 60 * (endtime - starttime);
+            payment = 60 * (endtime - starttime);                                          //晚间20-22点时段
         }
     }
     
-    else{
+    else{                                                                                  //周末情况
         if(starttime >= 9 && endtime <= 12){
-            payment = 30 * (endtime - starttime);
+            payment = 30 * (endtime - starttime);                                          //上午9-12点时段                                     
         }
         else if(starttime < 12 && endtime >12){
-            payment = 30 * (12 - starttime) + 50 * (endtime - 12);
+            payment = 30 * (12 - starttime) + 50 * (endtime - 12);                         //12点前开打，最多三小时，因此不会超过18点
         }
-        else if(starttime >=12 && endtime <= 18){
-            payment = 50 * (endtime - starttime);
+        else if(starttime >=12 && endtime <= 18){ 
+            payment = 50 * (endtime - starttime);                                          //下午12-18点时段
         }
-        else if(starttime <18){
-            payment = 60 * (endtime - starttime);
+        else if(starttime <18 && endtime > 18){
+            payment = 50 * (18 - starttime) + 60 * (endtime - 18);                         //从18点前打到18点以后
+        }
+        else if(starttime >= 18){
+            payment = 60 * (endtime - starttime);                                          //晚间18-22点时段
         }
     }
     
@@ -77,6 +80,10 @@ int main(){
     while(cin>>year>>s>>month>>s>>date>>starttime>>s>>s>>k>>s>>endtime>>s>>k>>M){
         int week = Week(year, month, date);
         int field = Field(M);
+        if(starttime < 9 || endtime > 22 || starttime >= endtime || endtime - starttime > 3){
+             cout<<"Put the wrong time!"<<endl;
+             break;
+	}
         payment = field * Payment(week, starttime, endtime);
         if(field == 0){
             income = 0;
@@ -111,6 +118,8 @@ int main(){
             cout<<"-"<<payment<<" ";
         if(profit == 0)
             cout<<"0"<<endl;
+        else if(profit < 0)
+            cout<<profit<<endl;
         else
             cout<<"+"<<profit<<endl;
     }
