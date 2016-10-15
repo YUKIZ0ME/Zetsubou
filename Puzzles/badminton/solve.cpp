@@ -1,10 +1,18 @@
 #include <iostream>
 using namespace std;
+
+int year, month, date, starttime, endtime, M;
+char s;
+int k;
+int income, payment, total_income = 0, total_payment = 0, profit = 0, total_profit = 0;
+
+//Week函数将年月日转化为星期
 int Week(int year, int month, int date){
     int week = (date + 1 + 2*month + 3*(month + 1)/5 + year + year/4 - year/100 + year/400) % 7;  //基姆拉尔森星期公式
     return week; 
 }
 
+//Field函数根据报名人数确定订场数量
 int Field(int M){
     int T = 0, X = 0;
     if(M < 4)
@@ -15,7 +23,7 @@ int Field(int M){
         if(T == 0 && X >= 4){
             T++;
         }
-        else if(T == 1){
+        else if(T == 1){                                                                   //根据题中条件计算预约球场个数，注意只要M/6 = 1就多预约一个（M=6,时T=2）
             T++;
         }
         else if((T == 2 || T ==3) && X >= 4){
@@ -25,6 +33,7 @@ int Field(int M){
     return T;
 }
 
+//Payment函数计算每场根据时间所需支出
 int Payment(int week, int starttime, int endtime){
     int payment;
     if(1 <= week <= 5){                                                                    //星期1-5的情况
@@ -72,18 +81,15 @@ int Payment(int week, int starttime, int endtime){
     return payment;
 }
 
-int main(){
-    int year, month, date, starttime, endtime, M;
-    char s;
-    int k;
-    int income, payment, total_income = 0, total_payment = 0, profit = 0, total_profit = 0;
-    while(cin>>year>>s>>month>>s>>date>>starttime>>s>>s>>k>>s>>endtime>>s>>k>>M){
-        int week = Week(year, month, date);
+//Output函数计算每场收入支出利润并显示
+void Output(){
+    cin>>year>>s>>month>>s>>date>>starttime>>s>>s>>k>>s>>endtime>>s>>k>>M;
+    int week = Week(year, month, date);
         int field = Field(M);
         if(starttime < 9 || endtime > 22 || starttime >= endtime || endtime - starttime > 3){
              cout<<"Put the wrong time!"<<endl;
-             break;
-	}
+             return;
+	    }
         payment = field * Payment(week, starttime, endtime);
         if(field == 0){
             income = 0;
@@ -121,9 +127,19 @@ int main(){
         else
             cout<<"+"<<profit<<endl;
     }
-    cout<<endl;
+//Total 函数计算总收入，总支出及利润并显示
+void Total(){
     cout<<"Total Income: "<<total_income<<endl;
     cout<<"Total Payment "<<total_payment<<endl;
     cout<<"Profit "<<total_income - total_payment<<endl;
+}
+
+int main(){    
+    cout<<"[Summary]"<<endl<<endl;
+    while(cin){
+    Output();
+    }
+    cout<<endl;
+    Total();
     return 0;
 }
