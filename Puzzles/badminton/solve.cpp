@@ -2,10 +2,10 @@
 using namespace std;
 
 int year, month, date, starttime, endtime, M;
-char s;
-int k;
+char char1;                    //存放输入数据中不需要的字符
+int minute;                    //存放预约时间中的分钟数（均为00）
 int income, payment, total_income = 0, total_payment = 0, profit = 0, total_profit = 0;
-
+int times = 0;                 //统计数据组数
 //Week函数将年月日转化为星期
 int Week(int year, int month, int date){
     int week = (date + 1 + 2*month + 3*(month + 1)/5 + year + year/4 - year/100 + year/400) % 7;  //基姆拉尔森星期公式
@@ -83,50 +83,59 @@ int Payment(int week, int starttime, int endtime){
 
 //Output函数计算每场收入支出利润并显示
 void Output(){
-    cin>>year>>s>>month>>s>>date>>starttime>>s>>s>>k>>s>>endtime>>s>>k>>M;
-    int week = Week(year, month, date);
-        int field = Field(M);
-        if(starttime < 9 || endtime > 22 || starttime >= endtime || endtime - starttime > 3){
-             cout<<"Put the wrong time!"<<endl;
-             return;
-	    }
-        payment = field * Payment(week, starttime, endtime);
-        if(field == 0){
-            income = 0;
-        }
-        else{
-            income = 30 * M;
-        }
-        profit = income - payment;
-        total_income+=income;
-        total_payment+=payment;
-        cout<<year<<"-";
-        if(month < 10)
-            cout<<"0"<<month<<"-";
-        else
-            cout<<month<<"-";
-        if(date < 10)
-            cout<<"0"<<date<<" ";
-        else
-            cout<<date<<" ";
-        if(starttime < 10)
-            cout<<"0"<<starttime;
-        else
-            cout<<starttime;
-        cout<<":00~"<<endtime<<":00 ";
-        if(income == 0)
-            cout<<"0 ";
-        else
-            cout<<"+"<<income<<" ";
-        if(payment == 0)
-            cout<<"0 ";
-        else
-            cout<<"-"<<payment<<" ";
-        if(profit <= 0)
-            cout<<profit<<endl;
-        else
-            cout<<"+"<<profit<<endl;
+    if(times == 0){
+       cout<<"[Summary]"<<endl<<endl;
     }
+    cin>>year>>char1>>month>>char1>>date;
+    cin>>starttime>>char1>>minute>>char1>>endtime>>char1>>minute>>M;
+    if(date == 0)
+        return;
+    int week = Week(year, month, date);
+    int field = Field(M);
+    if(starttime < 9 || endtime > 22 || starttime >= endtime || endtime - starttime > 3){
+        cout<<"Put the wrong time!"<<endl;
+        return;
+	}
+    payment = field * Payment(week, starttime, endtime);
+    if(field == 0){
+        income = 0;
+    }
+    else{
+        income = 30 * M;
+    }
+    profit = income - payment;
+    total_income+=income;
+    total_payment+=payment;
+    cout<<year<<"-";
+    if(month < 10)
+        cout<<"0"<<month<<"-";
+    else
+        cout<<month<<"-";
+    if(date < 10)
+        cout<<"0"<<date<<" ";
+    else
+        cout<<date<<" ";
+    if(starttime < 10)
+        cout<<"0"<<starttime;
+    else
+        cout<<starttime;
+    cout<<":00~"<<endtime<<":00 ";
+    if(income == 0)
+        cout<<"0 ";
+    else
+        cout<<"+"<<income<<" ";
+    if(payment == 0)
+        cout<<"0 ";
+    else
+        cout<<"-"<<payment<<" ";
+    if(profit <= 0)
+        cout<<profit<<endl;
+    else
+        cout<<"+"<<profit<<endl;
+    times++;
+    date = 0;
+}
+
 //Total 函数计算总收入，总支出及利润并显示
 void Total(){
     cout<<"Total Income: "<<total_income<<endl;
@@ -134,10 +143,9 @@ void Total(){
     cout<<"Profit "<<total_income - total_payment<<endl;
 }
 
-int main(){    
-    cout<<"[Summary]"<<endl<<endl;
+int main(){
     while(cin){
-    Output();
+        Output();
     }
     cout<<endl;
     Total();
